@@ -79,7 +79,7 @@ transition:border-color .2s,color .2s,background .2s}
 /* post */
 .post-title{margin:0 0 6px;font-size:16px;font-weight:600;line-height:1.5;color:var(--dark)}
 .post-meta{margin:0 0 36px;font-size:10px;color:var(--mute)}
-.body{font-size:13px;line-height:2;font-weight:350}
+.body{font-size:13px;line-height:2;font-weight:350;text-align:justify}
 .body p{margin:0 0 1.2em}
 .body h2,.body h3{font-weight:600;color:var(--dark);margin:2em 0 .7em;line-height:1.5;font-size:14px}
 .body blockquote{margin:1.6em 0;padding:0 0 0 14px;border-left:2px solid var(--accent);color:#666}
