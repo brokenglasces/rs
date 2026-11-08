@@ -1,7 +1,7 @@
 ---
 title: 첫 번째 글
 date: 2026-10-31
-category: Ventricle
+category: ventricle
 ---
 본문을 여기에 쓰세요.
 줄바꿈은 이렇게 들어갑니다.
