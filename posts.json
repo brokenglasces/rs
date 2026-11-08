@@ -1,23 +1,5 @@
 [
   {
-    "slug": "first",
-    "title": "첫 번째 글",
-    "date": "2026-10-31",
-    "category": "ventricle"
-  },
-  {
-    "slug": "second",
-    "title": "두 번째 글",
-    "date": "2026-10-06",
-    "category": "morgue"
-  },
-  {
-    "slug": "third",
-    "title": "세 번째 글",
-    "date": "2026-08-27",
-    "category": "sharp objects"
-  },
-  {
     "slug": "0001",
     "title": "그림자 없는 사람",
     "date": "2024-03-10",
