@@ -1,7 +1,7 @@
 ---
 title: 제목
 date: 2026-11-08
-category: category A
+category: Ventricle
 ---
 본문을 여기에 쓰세요.
 줄바꿈은 이렇게 들어갑니다.
