@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>글쓰기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .tool select{width:100%;padding:8px 0;border:0;border-bottom:1px solid #000;border-radius:0;background:transparent;font:inherit;font-size:12px;color:#000;outline:0}
+    .tool .chk{display:flex;align-items:center;gap:8px;margin-top:22px;font-size:12px;color:#000}
+    .tool .chk input{width:auto}
+    .tool .sec{display:none}
+    .tool .sec.on{display:block}
+    .tool .row{display:flex;gap:10px;align-items:center;margin-top:20px}
+    .tool .row button,.tool .row a{margin:0}
+    .tool a.btn{display:inline-block;padding:9px 18px;border:1px solid #000;background:#000;color:#fff;font-size:11px}
+    .tool a.btn:hover{background:#fff;color:#000}
+    .tool .msg{margin-top:10px;font-size:11px;color:var(--mute)}
+  </style>
+</head>
+<body>
+<div class="wrap tool">
+  <h1 class="post-title">글쓰기</h1>
+  <p class="msg" style="margin:0">입력한 내용은 이 브라우저 안에서만 처리돼요. 완성 후 [GitHub에 올리기]를 누르고 Commit changes만 하면 끝나요.</p>
+
+  <label>제목</label><input id="title">
+  <label>카테고리</label><select id="cat"></select>
+  <label>날짜</label><input id="date" type="date">
+  <label>파일 이름 (선택 · 영문/숫자/하이픈, 비우면 자동)</label><input id="slug" placeholder="my-post">
+  <label>본문</label><textarea id="body" placeholder="빈 줄 = 새 문단&#10;---  구분선&#10;> 인용&#10;![](images/photo.jpg)  사진"></textarea>
+
+  <label class="chk"><input type="checkbox" id="isSecret"> 비밀글로 쓰기</label>
+  <div class="sec" id="secBox">
+    <label>비밀번호</label><input id="pw" type="text" autocomplete="off">
+    <label>힌트 (선택)</label><input id="hint">
+  </div>
+
+  <div class="row">
+    <button id="go">만들기</button>
+  </div>
+
+  <textarea class="out" id="out" readonly placeholder="여기에 결과가 나와요"></textarea>
+  <div class="row">
+    <a class="btn" id="gh" href="#" target="_blank" rel="noopener" hidden>GitHub에 올리기</a>
+    <button id="copy" hidden>복사</button>
+  </div>
+  <p class="msg" id="msg"></p>
+</div>
+<script src="data.js"></script>
+<script>
+const REPO = "brokenglasces/rs";   // 아이디/저장소 이름 (바뀌면 여기만 수정)
+const $ = (s) => document.querySelector(s);
+$("#date").value = new Date().toISOString().slice(0, 10);
+$("#cat").innerHTML = SITE.categories.map((c) => `<option>${c}</option>`).join("");
+$("#isSecret").onchange = (e) => $("#secBox").classList.toggle("on", e.target.checked);
+
+const b64 = (u) => { let s = ""; u.forEach((c) => (s += String.fromCharCode(c))); return btoa(s); };
+async function enc(text, pw) {
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 150000, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt"]);
+  const buf = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, new TextEncoder().encode(text));
+  return b64(salt) + "." + b64(iv) + "." + b64(new Uint8Array(buf));
+}
+
+$("#go").onclick = async () => {
+  const msg = $("#msg"); msg.textContent = "";
+  const title = $("#title").value.trim(), body = $("#body").value, secret = $("#isSecret").checked;
+  if (!title || !body.trim()) { msg.textContent = "제목과 본문을 입력해 주세요."; return; }
+  if (secret && !$("#pw").value) { msg.textContent = "비밀번호를 입력해 주세요."; return; }
+  const d = $("#date").value;
+  let slug = $("#slug").value.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+  if (!slug) { const n = new Date(); slug = "post-" + d.replace(/-/g, "") + "-" + String(n.getHours()).padStart(2, "0") + String(n.getMinutes()).padStart(2, "0"); }
+  const L = ["---", "title: " + title, "date: " + d, "category: " + $("#cat").value];
+  let text;
+  if (secret) {
+    if ($("#hint").value.trim()) L.push("hint: " + $("#hint").value.trim());
+    L.push("secret: " + await enc(body, $("#pw").value), "---", "");
+    text = L.join("\n");
+  } else {
+    L.push("---"); text = L.join("\n") + "\n" + body.replace(/\s+$/, "") + "\n";
+  }
+  $("#out").value = text;
+  const base = "https://github.com/" + REPO + "/new/main/posts?filename=" + encodeURIComponent(slug + ".md");
+  const full = base + "&value=" + encodeURIComponent(text);
+  const gh = $("#gh"); gh.hidden = false; $("#copy").hidden = false;
+  if (full.length < 7500) { gh.href = full; gh.onclick = null; msg.textContent = "[GitHub에 올리기]를 누른 뒤 Commit changes를 눌러 주세요. (파일 이름: " + slug + ".md)"; }
+  else {
+    gh.href = base;
+    gh.onclick = () => { $("#out").select(); navigator.clipboard && navigator.clipboard.writeText(text); };
+    msg.textContent = "글이 길어서 내용은 자동 복사돼요. 열린 GitHub 화면에 붙여넣고 Commit changes를 눌러 주세요. (파일 이름: " + slug + ".md)";
+  }
+};
+$("#copy").onclick = () => { $("#out").select(); navigator.clipboard && navigator.clipboard.writeText($("#out").value); $("#msg").textContent = "복사했어요."; };
+</script>
+</body>
+</html>
