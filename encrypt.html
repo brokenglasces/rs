@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>비밀글 만들기</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap tool">
+  <h1 class="post-title">비밀글 만들기</h1>
+  <p class="note" style="color:#8c8c8c;font-size:12.5px;margin:0 0 8px">입력한 내용은 이 브라우저 안에서만 암호화되고 어디로도 전송되지 않아요. 결과를 복사해 data.js의 POSTS에 붙여넣으세요.</p>
+  <label>slug (영문/숫자, 겹치지 않게)</label><input id="slug" placeholder="secret-1">
+  <label>제목</label><input id="title">
+  <label>날짜</label><input id="date" type="date">
+  <label>카테고리 (data.js의 categories 중 하나)</label><input id="cat">
+  <label>비밀번호</label><input id="pw" type="text" autocomplete="off">
+  <label>힌트 (선택, 잠금 화면에 표시)</label><input id="hint">
+  <label>본문</label><textarea id="body"></textarea>
+  <button id="go">암호화</button>
+  <textarea class="out" id="out" readonly></textarea>
+  <button id="copy">복사</button>
+</div>
+<script>
+const $=(s)=>document.querySelector(s);
+$("#date").value=new Date().toISOString().slice(0,10);
+const b64=(u)=>{let s="";u.forEach((c)=>s+=String.fromCharCode(c));return btoa(s)};
+async function enc(text,pw){
+  const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+  const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
+  const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:150000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt"]);
+  const buf=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,new TextEncoder().encode(text));
+  return {salt:b64(salt),iv:b64(iv),data:b64(new Uint8Array(buf))};
+}
+$("#go").onclick=async()=>{
+  if(!$("#pw").value||!$("#body").value){$("#out").value="비밀번호와 본문을 입력해 주세요.";return}
+  const s=await enc($("#body").value,$("#pw").value);
+  const hint=$("#hint").value?`, hint: ${JSON.stringify($("#hint").value)}`:"";
+  $("#out").value=`  { slug: ${JSON.stringify($("#slug").value)}, title: ${JSON.stringify($("#title").value)}, date: ${JSON.stringify($("#date").value)}, category: ${JSON.stringify($("#cat").value)},\n    secret: { salt: "${s.salt}", iv: "${s.iv}", data: "${s.data}"${hint} } },`;
+};
+$("#copy").onclick=()=>{$("#out").select();navigator.clipboard&&navigator.clipboard.writeText($("#out").value)};
+</script>
+</body>
+</html>
