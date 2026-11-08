@@ -49,7 +49,7 @@
     const all = [{ label: "all", href: "#/" }].concat(SITE.categories.map((c) => ({ label: c, href: "#/c/" + encodeURIComponent(c), key: c })));
     $("#cats").innerHTML = all.map((c) =>
       `<li><a href="${c.href}" class="${(c.key || "") === active ? "on" : ""}">${esc(c.label)}</a></li>`).join("");
-    $("#pgLabel").textContent = active ? "pages · " + active : "pages";
+    $("#pgLabel").textContent = active ? "archive · " + active : "archive";
     setDrawer(drawer.classList.contains("open"));
   }
 
