@@ -3,7 +3,7 @@
     "slug": "secret-sample",
     "title": "비밀글 예시 (비밀번호: 1234)",
     "date": "2026-11-01",
-    "category": "category A",
+    "category": "Sharp Objects",
     "secret": true,
     "hint": "비밀번호는 1234 입니다. (예시)"
   },
