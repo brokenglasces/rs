@@ -6,5 +6,12 @@
     "category": "sharp objects",
     "secret": true,
     "hint": "seong"
+  },
+  {
+    "slug": "0101",
+    "title": "CUT",
+    "date": "2022-11-23",
+    "category": "morgue",
+    "secret": true
   }
 ]
