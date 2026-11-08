@@ -1,0 +1,28 @@
+[
+  {
+    "slug": "secret-sample",
+    "title": "비밀글 예시 (비밀번호: 1234)",
+    "date": "2026-11-01",
+    "category": "category A",
+    "secret": true,
+    "hint": "비밀번호는 1234 입니다. (예시)"
+  },
+  {
+    "slug": "first",
+    "title": "첫 번째 글",
+    "date": "2026-10-31",
+    "category": "category A"
+  },
+  {
+    "slug": "second",
+    "title": "두 번째 글",
+    "date": "2026-10-06",
+    "category": "category B"
+  },
+  {
+    "slug": "third",
+    "title": "세 번째 글",
+    "date": "2026-08-27",
+    "category": "category C"
+  }
+]

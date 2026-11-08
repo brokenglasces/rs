@@ -1,0 +1,14 @@
+/* ===== 사이트 설정 (여기만 고치면 됩니다) ===== */
+const SITE = {
+  title: "my blog",
+  desc: "한 줄 소개를 적어주세요",
+  profile: "images/profile.jpg",   // 프로필 사진 경로 (파일이 없으면 자동으로 안 보임, 흑백으로 표시됨)
+  categories: ["category A", "category B", "category C"],
+  intro: { title: "hello", text: "소개 문구를 적어주세요." },   // null이면 숨김
+  footer: "© my blog",
+  perPage: 6,
+  /* mp3 플레이어: src를 비우면 숨겨집니다. 파일은 music/ 폴더에 넣고 경로를 적으세요. */
+  music: { src: "", title: "track name" },
+};
+
+/* 글은 이제 posts/ 폴더의 .md 파일로 씁니다. (README 참고) */
