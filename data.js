@@ -1,9 +1,9 @@
 /* ===== 사이트 설정 (여기만 고치면 됩니다) ===== */
 const SITE = {
-  title: "my blog",
-  desc: "한 줄 소개를 적어주세요",
+  title: "Broken Glasses",
+  desc: "한때 태양을 볼 수 있는 눈을 원했지",
   profile: "images/profile.jpg",   // 프로필 사진 경로 (파일이 없으면 자동으로 안 보임, 흑백으로 표시됨)
-  categories: ["category A", "category B", "category C"],
+  categories: ["Ventricle", "Morgue", "Sharp Objects"],
   intro: { title: "hello", text: "소개 문구를 적어주세요." },   // null이면 숨김
   footer: "© my blog",
   perPage: 6,
