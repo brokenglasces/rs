@@ -8,6 +8,6 @@ const SITE = {
   footer: "© architect",
   perPage: 6,
   /* mp3 플레이어: src를 비우면 숨겨짐. 파일은 music/ 폴더에 넣고 경로. */
-  music: { src: "", title: "track name" },
+  music: { src: "music/song.mp3", title: "play" },
 };
 
