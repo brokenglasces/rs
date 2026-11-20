@@ -77,20 +77,18 @@ transition:border-color .2s,color .2s,background .2s}
 .paging a:hover{color:var(--accent)}
 
 /* post */
-.post-title{margin:0 0 5px;font-size:14px;font-weight:600;line-height:1.5;color:var(--dark)}
-.post-meta{margin:0 0 24px;font-size:9.5px;color:var(--mute)}
-.body{font-size:10px;line-height:1.9;font-weight:350}
-.body p{margin:0 0 .9em}
-.body h2,.body h3{font-weight:600;color:var(--dark);margin:1.6em 0 .6em;line-height:1.5;font-size:11.5px}
-.body blockquote{margin:1.3em 0;padding:0 0 0 12px;border-left:2px solid var(--accent);color:#666}
-.body hr{border:0;border-top:1px solid var(--line);margin:1.8em auto;width:24%}
+.post-title{margin:0 0 5px;font-size:15px;font-weight:600;line-height:1.5;color:var(--dark)}
+.post-meta{margin:0 0 26px;font-size:10px;color:var(--mute)}
+.body{font-size:11px;line-height:1.95;font-weight:350;text-align:justify}
+.body p{margin:0 0 .95em}
+.body h2,.body h3{font-weight:600;color:var(--dark);margin:1.7em 0 .6em;line-height:1.5;font-size:12.5px;text-align:left}
+.body blockquote{margin:1.3em 0;padding:0 0 0 12px;border-left:2px solid var(--accent);color:#666;text-align:left}
+.body hr{border:0;border-top:1px solid var(--line);margin:1.9em auto;width:24%}
 .body a{color:var(--dark);font-weight:600;border-bottom:1px solid var(--dark)}
 .body a:hover{opacity:.6}
-.body img{display:block;margin:1.4em auto}
-.back{display:inline-block;margin-top:30px;font-size:10px;color:var(--mute)}
+.body img{display:block;margin:1.5em auto}
+.back{display:inline-block;margin-top:30px;font-size:10.5px;color:var(--mute)}
 .back:hover{color:var(--accent)}
-.comments{margin-top:56px}
-.note{font-size:10px;color:var(--mute)}
 
 .foot{margin-top:64px;font-size:10px;color:var(--mute)}
 
