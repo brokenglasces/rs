@@ -128,10 +128,7 @@ font:inherit;font-size:13px;color:#000;outline:0}
 .tg{margin:.5em 0}
 .tg-h{display:flex;align-items:center;gap:.7em;width:100%;padding:.35em 0;text-align:left;font-size:1em;font-weight:600;color:var(--dark)}
 .tg-h:hover{opacity:.6}
-.tg-i{flex:none;width:0;height:0;border-left:.62em solid currentColor;border-top:.38em solid transparent;border-bottom:.38em solid transparent;transition:transform .35s var(--ease)}
-.tg.open .tg-i{transform:rotate(90deg)}
-.tg-b{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .45s var(--ease),opacity .3s ease}
-.tg.open .tg-b{grid-template-rows:1fr;opacity:1}
-.tg-b>div{overflow:hidden;min-height:0;padding-left:1.4em}
-.tg-b>div>:first-child{margin-top:.4em}
-.tg-b>div>:last-child{margin-bottom:.8em}
+.tg-i{position:relative;flex:none;width:.8em;height:.8em}
+.tg-i::before,.tg-i::after{content:"";position:absolute;left:0;top:50%;width:100%;height:1.5px;margin-top:-.75px;background:currentColor;transition:transform .35s var(--ease)}
+.tg-i::after{transform:rotate(90deg)}
+.tg.open .tg-i::after{transform:rotate(0)}
