@@ -15,16 +15,26 @@
       .replace(/\*([^*]+)\*/g, "<em>$1</em>");
   }
   function render(src) {
-    return src.split(/\n\s*\n/).map((b) => {
-      b = b.trim();
-      if (!b) return "";
-      if (b[0] === "<") return b;
-      if (/^-{3,}$/.test(b)) return "<hr>";
-      if (b.startsWith("## ")) return "<h2>" + inline(esc(b.slice(3))) + "</h2>";
-      if (b.startsWith("> ")) return "<blockquote>" + inline(esc(b.replace(/^> ?/gm, "")).replace(/\n/g, "<br>")) + "</blockquote>";
-      return "<p>" + inline(esc(b)).replace(/\n/g, "<br>") + "</p>";
-    }).join("");
-  }
+\const tg = [];
+\src = src.replace(/^:::[ \t](.+)\n([\s\S]?)\n:::[ \t]$/gm, (m, t, inner) => {
+\tg.push({ t: t.trim(), inner: inner });
+\return "\n\n@@TG" + (tg.length - 1) + "@@\n\n";
+});
+\return src.split(/\n\s\n/).map((b) => {
+\b = b.trim();
+\if (!b) return "";
+\const m = b.match(/^@@TG(\d+)@@$/);
+\if (m) {
+\const x = tg[+m[1]];
+\return '<div class="tg"><button type="button" class="tg-h" aria-expanded="false"><i class="tg-i"></i><span>' + inline(esc(x.t)) + '</span></button><div class="tg-b"><div>' + render(x.inner) + "</div></div></div>";
+}
+\if (b[0] === "<") return b;
+\if (/^-{3,}$/.test(b)) return "<hr>";
+\if (b.startsWith("## ")) return "<h2>" + inline(esc(b.slice(3))) + "</h2>";
+\if (b.startsWith("> ")) return "<blockquote>" + inline(esc(b.replace(/^> ?/gm, "")).replace(/\n/g, "<br>")) + "</blockquote>";
+\return "<p>" + inline(esc(b)).replace(/\n/g, "<br>") + "</p>";
+}).join("");
+}
 
   /* header / footer */
   $("#siteTitle").textContent = SITE.title;
@@ -175,4 +185,12 @@
     .then((j) => { posts = j.sort((x, y) => (x.date < y.date ? 1 : -1)); })
     .catch(() => { posts = []; })
     .then(() => { ready = true; route(); });
+
+  document.addEventListener("click", (e) => {
+    const h = e.target.closest(".tg-h");
+    if (!h) return;
+    const box = h.parentNode, open = !box.classList.contains("open");
+    box.classList.toggle("open", open);
+    h.setAttribute("aria-expanded", open);
+  });
 })();
